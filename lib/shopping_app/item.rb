@@ -1,5 +1,6 @@
 class Item
   attr_reader :number, :name, :price
+  attr_accessor :owner
 
   @@instances = []
 

@@ -1,6 +1,9 @@
 require_relative "item_manager"
 
 class Cart
+  # attr_accessorで、ownerというインスタンス変数を読み書き可能にします
+  attr_accessor :owner
+  
   include ItemManager
 
   def initialize(owner)
@@ -24,16 +27,17 @@ class Cart
 
   def check_out
     return if owner.wallet.balance < total_amount
-  # ## 要件
-  #   - カートの中身（Cart#items）のすべてのアイテムの購入金額が、カートのオーナーのウォレットからアイテムのオーナーのウォレットに移されること。
-  #   - カートの中身（Cart#items）のすべてのアイテムのオーナー権限が、カートのオーナーに移されること。
-  #   - カートの中身（Cart#items）が空になること。
+    @items.each do |item|
+      # カートのオーナーのウォレットからアイテムの価格を引き出す
+      owner.wallet.withdraw(item.price)
+      # アイテムのオーナーのウォレットにアイテムの価格を入金する
+      item.owner.wallet.deposit(item.price)
+      # アイテムのオーナー権限をカートのオーナーに移す
+      item.owner = owner
+    end
 
-  # ## ヒント
-  #   - カートのオーナーのウォレット ==> self.owner.wallet
-  #   - アイテムのオーナーのウォレット ==> item.owner.wallet
-  #   - お金が移されるということ ==> (？)のウォレットからその分を引き出して、(？)のウォレットにその分を入金するということ
-  #   - アイテムのオーナー権限がカートのオーナーに移されること ==> オーナーの書き換え(item.owner = ?)
+    # カートの中身を空にする
+    @items.clear
   end
 
 end

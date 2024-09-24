@@ -1,5 +1,6 @@
 class Wallet
   attr_reader :balance
+  attr_accessor :owner
 
   def initialize(owner)
     self.owner = owner
