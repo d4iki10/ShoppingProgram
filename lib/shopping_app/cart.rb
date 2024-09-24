@@ -1,9 +1,18 @@
 require_relative "item_manager"
 
-class Cart
-  # attr_accessorで、ownerというインスタンス変数を読み書き可能にします
+# Ownableモジュールを定義する
+module Ownable
   attr_accessor :owner
-  
+
+  def change_owner(new_owner)
+    self.owner = new_owner
+  end
+end
+
+class Cart
+  # Ownableモジュールをこのクラスに追加する
+  include Ownable
+
   include ItemManager
 
   def initialize(owner)

@@ -1,6 +1,18 @@
-class Item
-  attr_reader :number, :name, :price
+# Ownableモジュールを定義する
+module Ownable
   attr_accessor :owner
+
+  def change_owner(new_owner)
+    self.owner = new_owner
+  end
+end
+
+
+class Item
+  # Ownableモジュールをこのクラスに追加する
+  include Ownable
+  
+  attr_reader :number, :name, :price
 
   @@instances = []
 
